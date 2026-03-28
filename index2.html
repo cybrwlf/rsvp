@@ -5,29 +5,127 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Event RSVP</title>
     <style>
-        :root { --primary-color: #d4a373; --bg-color: #f8f9fa; --text-color: #333; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .container { width: 95%; max-width: 450px; padding: 20px; }
-        #no-access { text-align: center; padding: 40px 20px; background: white; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
-        .card { display: none; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
-        h2 { text-align: center; font-weight: 300; margin-bottom: 25px; color: var(--primary-color); }
-        .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; color: #555; }
-        input, select, textarea { width: 100%; padding: 14px; border: 1px solid #e0e0e0; border-radius: 10px; font-size: 16px; background: #fafafa; box-sizing: border-box; }
-        button { background-color: var(--primary-color); color: white; border: none; padding: 16px; width: 100%; border-radius: 10px; font-size: 18px; font-weight: 600; cursor: pointer; }
-        #success { display: none; text-align: center; padding: 40px 20px; }
+        :root {
+            --primary-color: #d4a373; /* Elegant Gold/Tan */
+            --bg-color: #f8f9fa;
+            --text-color: #333;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 450px;
+            padding: 20px;
+        }
+
+        /* Access Denied View */
+        #no-access {
+            text-align: center;
+            padding: 50px 30px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+
+        /* Main RSVP Card */
+        .card {
+            display: none; /* Hidden until URL check passes */
+            background: var(--card-bg);
+            padding: 40px 30px;
+            border-radius: 25px;
+            box-shadow: 0 15px 45px rgba(0,0,0,0.1);
+        }
+
+        h2 { 
+            text-align: center; 
+            font-weight: 300; 
+            margin-bottom: 30px; 
+            color: var(--primary-color);
+            letter-spacing: 1px;
+        }
+        
+        .form-group { margin-bottom: 25px; }
+        
+        label { 
+            display: block; 
+            margin-bottom: 10px; 
+            font-weight: 600; 
+            font-size: 0.85rem; 
+            color: #777;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 12px;
+            font-size: 16px; /* Prevents iOS zoom */
+            background: #fdfdfd;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(212, 163, 115, 0.1);
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 18px;
+            width: 100%;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: transform 0.2s, opacity 0.2s;
+        }
+
+        button:active { transform: scale(0.98); opacity: 0.9; }
+        button:disabled { background-color: #ccc; cursor: not-allowed; }
+
+        #success { 
+            display: none; 
+            text-align: center; 
+            padding: 60px 20px;
+            background: var(--card-bg);
+            border-radius: 25px;
+        }
+        
+        .icon { font-size: 48px; margin-bottom: 20px; display: block; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div id="no-access">
-        <h2>Private Event</h2>
-        <p>Please use the link provided in your invitation.</p>
+        <span class="icon">💌</span>
+        <h2>Private Invitation</h2>
+        <p style="color: #999; line-height: 1.6;">Please use the personalized link or QR code from your invitation to access the RSVP form.</p>
     </div>
 
     <div id="rsvp-card" class="card">
+        <span class="icon" style="text-align: center;">🥂</span>
         <h2>Event RSVP</h2>
+        
         <form id="wedding-form">
             <div class="form-group">
                 <label>Can you attend?</label>
@@ -40,18 +138,18 @@
             </div>
 
             <div class="form-group">
-                <label>What are the name(s) of people attending?</label>
-                <input type="text" id="field_names" placeholder="Your Name(s)" required>
+                <label>Names of those attending</label>
+                <input type="text" id="field_names" placeholder="Full Name(s)" required>
             </div>
 
             <div class="form-group">
-                <label>Do you have any accessibility requirements?</label>
-                <input type="text" id="field_access" placeholder="e.g. Wheelchair, dietary needs, etc.">
+                <label>Accessibility Requirements</label>
+                <input type="text" id="field_access" placeholder="e.g. Dietary, ramp access, etc.">
             </div>
 
             <div class="form-group">
                 <label>Song Requests</label>
-                <input type="text" id="field_songs" placeholder="What will get you on the dance floor?">
+                <input type="text" id="field_songs" placeholder="Your favorite dance track">
             </div>
 
             <button type="submit" id="submit-btn">Submit RSVP</button>
@@ -59,38 +157,45 @@
     </div>
 
     <div id="success">
-        <h2>Success!</h2>
-        <p>Your response has been recorded. See you there!</p>
+        <span class="icon">✨</span>
+        <h2>Thank You!</h2>
+        <p style="color: #777;">Your response has been recorded. We can't wait to see you!</p>
     </div>
 </div>
 
 <script>
+    // 1. SETTINGS
     const SECRET_GUEST_CODE = "10164218201216610";
     const GOOGLE_FORM_ACTION = "https://docs.google.com/forms/d/e/1FAIpQLSf-1UR70Q6ZCfP7X11o4fDdjp_eh9PsmYlOa7OoeVKJk2vAdg/formResponse";
 
+    // Entry IDs from your Google Form link
     const ID_ATTEND = "entry.877086558";
     const ID_NAMES  = "entry.1498135098";
     const ID_ACCESS = "entry.1424661284";
     const ID_SONGS  = "entry.2606285";
 
+    // 2. URL CHECK (THE BOUNCER)
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('guest') === SECRET_GUEST_CODE) {
         document.getElementById('rsvp-card').style.display = 'block';
         document.getElementById('no-access').style.display = 'none';
     }
 
+    // 3. SUBMISSION HANDLING
     document.getElementById('wedding-form').addEventListener('submit', function(e) {
         e.preventDefault();
         const btn = document.getElementById('submit-btn');
-        btn.innerText = "Saving...";
+        btn.innerText = "Saving your spot...";
         btn.disabled = true;
 
+        // Build the submission URL with parameters
         const url = new URL(GOOGLE_FORM_ACTION);
         url.searchParams.append(ID_ATTEND, document.getElementById('field_attend').value);
         url.searchParams.append(ID_NAMES, document.getElementById('field_names').value);
         url.searchParams.append(ID_ACCESS, document.getElementById('field_access').value);
         url.searchParams.append(ID_SONGS, document.getElementById('field_songs').value);
 
+        // Send to Google silently
         fetch(url, {
             method: 'POST',
             mode: 'no-cors'
@@ -98,7 +203,7 @@
             document.getElementById('rsvp-card').style.display = 'none';
             document.getElementById('success').style.display = 'block';
         }).catch(() => {
-            alert("Error submitting. Please try again.");
+            alert("Something went wrong. Please try again!");
             btn.innerText = "Submit RSVP";
             btn.disabled = false;
         });
